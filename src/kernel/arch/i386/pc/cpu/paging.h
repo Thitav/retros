@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+// https://wiki.osdev.org/Paging
+
 typedef uint32_t page_directory_t[1024] __attribute__((aligned(4096)));
 typedef uint32_t page_table_t[1024] __attribute__((aligned(4096)));
 

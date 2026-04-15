@@ -1,5 +1,5 @@
 .section .text
-.globl page_directory_load
+.global page_directory_load
 page_directory_load:
   pushl %ebp
   movl %esp, %ebp
@@ -9,7 +9,7 @@ page_directory_load:
   popl %ebp
   ret
 
-.globl paging_enable
+.global paging_enable
 paging_enable:
   pushl %ebp
   movl %esp, %ebp

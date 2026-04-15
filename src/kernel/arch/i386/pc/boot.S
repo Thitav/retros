@@ -28,8 +28,10 @@ graphics:         # Graphics fields (required since flags[2] is set)
 # Stack for the initial thread
 .section .bss
 .align 0x10
+.global stack_bottom
 stack_bottom:
 .skip 0x4000 # 16 KB
+.global stack_top
 stack_top:
 
 # Kernel entry point

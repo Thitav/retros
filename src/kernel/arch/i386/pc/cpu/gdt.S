@@ -1,18 +1,23 @@
 .section .data
-gdt_descriptor:
-  .word 0 # GDT size
-  .long 0 # GDT start
+gdtr:
+    .word 0 # GDT size
+    .long 0 # GDT offset
 
 .section .text
-.globl gdt_set
-gdt_set:
-  pushl %ebp
-  movl %esp, %ebp
-  movw 4(%esp), %ax
-  movw %ax, gdt_descriptor
-  movl 8(%esp), %eax
-  movl %eax, gdt_descriptor+2
-  lgdt gdt_descriptor
-  movl %ebp, %esp
-  popl %ebp
-  ret
+.global gdt_load
+gdt_load:
+    movw 4(%esp), %ax
+    movw %ax, gdtr
+    movl 8(%esp), %eax
+    movl %eax, gdtr+2
+    lgdt gdtr
+    ljmp $0x08, $gdt_flush
+
+gdt_flush:
+    movw $0x10, %ax    # 0x10 is the offset to Kernel Data Segment
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %fs
+    movw %ax, %gs
+    movw %ax, %ss
+    ret
