@@ -21,6 +21,9 @@ function(load_profile ISA PLATFORM)
     list(APPEND TMP_FIRST_SRCS "${CMAKE_CURRENT_LIST_DIR}/${I}")
   endforeach(I)
 
+  set(ISA_PATH "${ISA_PATH}" PARENT_SCOPE)
+  set(PLATFORM_PATH "${PLATFORM_PATH}" PARENT_SCOPE)
+
   # Remove files from the other lists
   list(REMOVE_ITEM ISA_SRCS ${TMP_FIRST_SRCS})
   list(REMOVE_ITEM PLATFORM_SRCS ${TMP_FIRST_SRCS})
@@ -54,7 +57,7 @@ execute_process(COMMAND ${CMAKE_C_COMPILER} -print-file-name=crtbegin.o
 execute_process(COMMAND ${CMAKE_C_COMPILER} -print-file-name=crtend.o
   OUTPUT_VARIABLE CC_CRTEND OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-target_include_directories(kernel PRIVATE "include" "../libc/include")
+target_include_directories(kernel PRIVATE "include" "../libc/include" "${PLATFORM_PATH}/include/")
 target_link_libraries(kernel ${CC_CRTBEGIN} ${CC_CRTEND} libk)
 
 target_compile_options(kernel PRIVATE $<$<COMPILE_LANGUAGE:C>:${ISA_C_FLAGS} ${PLATFORM_C_FLAGS}>)

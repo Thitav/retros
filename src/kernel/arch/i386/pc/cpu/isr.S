@@ -1,13 +1,13 @@
 .section .text
 
-.extern isr_handler
+.extern isr_entry
 
 isr_common_stub:
     # save state
     pushal
 
     movw %ds, %ax
-    pushl %eax
+    pushw %ax
     
     movw $0x10, %ax
     movw %ax, %ds
@@ -20,11 +20,12 @@ isr_common_stub:
 
     # call handler
     pushl %esp
-    call isr_handler
-    addl $4, %esp       # Clean up the pushed ESP
+    call isr_entry
+    # function return new esp
+    movl %eax, %esp
 
     # restore state
-    popl %eax
+    popw %ax
     movw %ax, %ds
     movw %ax, %es
     movw %ax, %fs
@@ -32,8 +33,8 @@ isr_common_stub:
     
     popal
     
-    # handle pushed error code
-    add $8, %esp
+    # handle pushed error and interrupt code
+    addl $8, %esp
     iret
 
 .macro ISR_ERROR_STUB n
