@@ -8,7 +8,8 @@ extern "C"
 {
 #endif
 
-  __attribute__((__noreturn__)) void abort(void);
+__attribute__((__noreturn__)) void abort(void);
+char *ltoa(long int n, char *str, int base);
 
 #ifdef __cplusplus
 }

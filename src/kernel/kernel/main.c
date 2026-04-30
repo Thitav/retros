@@ -1,34 +1,38 @@
 #include <kernel/font.h>
-#include <kernel/multiboot.h>
 #include <kernel/tty.h>
 #include <kernel/arch/timer.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "scheduler.h"
+#include <kernel/boot.h>
+#include "pmm.h"
+#include "utils/bitmap.h"
 
 void thread1(void) {
-    printf("1\n");
+    //printf("1\n");
 }
 
 void thread2(void) {
-    printf("2\n");
+    //printf("2\n");
 }
 
 void thread3(void) {
-    printf("3\n");
+    //printf("3\n");
 }
 
-void kernel_entry(uint32_t mb_magic, multiboot_info_t *mb_info)
+void kernel_main(struct boot_info *boot_info)
 {
-    if (mb_magic != MULTIBOOT_BOOTLOADER_MAGIC)
-    {
-        // Should be kernel panic
-        return;
-    }
+    vga_init(boot_info->framebuffer_width, boot_info->framebuffer_height);
+    tty_init(boot_info->framebuffer_width, boot_info->framebuffer_height, VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK, &font_univga);
 
-    vga_init(mb_info->framebuffer_width, mb_info->framebuffer_height);
-    tty_init(mb_info->framebuffer_width, mb_info->framebuffer_height, VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK, &font_univga);
+    pmm_init(boot_info->memory_maps, boot_info->memory_maps_length);
+
+    pmm_alloc();
+    char s[16];
+    ltoa(pmm_alloc(), &s[0], 16);
+    printf("%s\n", s);
 
     printf("Hello from kernel!\n");
     printf("Have a nice day!\n");

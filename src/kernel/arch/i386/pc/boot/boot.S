@@ -7,7 +7,7 @@
 .set CHECKSUM, -(MAGIC + FLAGS)           # Checksum of the above to verify that this header is in fact the multiboot header
 
 # Multiboot header
-.section .multiboot
+.section .multiboot.data, "aw"
 magic:            # Magic fields (required)
   .align 4
   .long MAGIC
@@ -35,29 +35,34 @@ stack_bottom:
 stack_top:
 
 # Kernel entry point
-.section .text
+.section .multiboot.text, "a"
 .global _start
 .type _start, @function
 _start:
-	movl $stack_top, %esp
+	movl $(stack_top - 0xC0000000), %esp
 
-  pushl %ebx # multiboot info struct pointer
-  pushl %eax # multiboot magic number
+    pushl %ebx # multiboot info struct pointer
+    pushl %eax # multiboot magic number
 
 	# Call the global constructors
-	call _init
+	# call _init
 
-  # Initialize crucial processor state
-  call prelude
+    # Initialize crucial processor state
+    call prelude
 
-	# Transfer control to the main kernel
-	call kernel_entry
+    lea 1f, %ecx
+    jmp *%ecx
+
+.section .text
+1:
+    call kernel_entry
 
 	# Hang if kernel_main unexpectedly returns
-	cli
-1:	hlt
-	jmp 1b
+ 	cli
+2:
+    hlt
+	jmp 2b
 
 # Set the size of the _start symbol to the current location '.' minus its start, 
 #   useful for debugging or when implementing call tracing
-.size _start, . - _start
+# .size _start, . - _start

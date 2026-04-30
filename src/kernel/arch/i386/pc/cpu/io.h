@@ -7,7 +7,7 @@
 
 static inline void io_outb(uint16_t port, uint8_t data)
 {
-    __asm__ volatile("outb %b0, %w1" : : "a"(data), "Nd"(port) : "memory");
+    __asm__ __volatile__("outb %b0, %w1" : : "a"(data), "Nd"(port) : "memory");
     /* There's an outb %al, $imm8 encoding, for compile-time constant port numbers that fit in 8b. (N constraint).
      * Wider immediate constants would be truncated at assemble-time (e.g. "i" constraint).
      * The  outb  %al, %dx  encoding is the only option for all other cases.
@@ -17,7 +17,7 @@ static inline void io_outb(uint16_t port, uint8_t data)
 static inline uint8_t io_inb(uint16_t port)
 {
     uint8_t ret;
-    __asm__ volatile("inb %w1, %b0"
+    __asm__ __volatile__("inb %w1, %b0"
                      : "=a"(ret)
                      : "Nd"(port)
                      : "memory");

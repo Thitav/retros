@@ -18,6 +18,6 @@ void idt_load(struct idt_entry* idt_table, uint16_t size)
 {
     idtr.offset = (uint32_t)idt_table;
     idtr.size = size;
-    __asm__ volatile("lidt %0" : : "m"(idtr)); // load the new IDT
-    __asm__ volatile("sti");                   // set the interrupt flag
+    __asm__ __volatile__("lidt %0" : : "m"(idtr)); // load the new IDT
+    __asm__ __volatile__("sti");                   // set the interrupt flag
 }

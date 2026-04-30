@@ -73,6 +73,7 @@ int printf(const char *restrict format, ...)
       written += len;
     }
     else
+    
     {
       format = format_begun_at;
       size_t len = strlen(format);
