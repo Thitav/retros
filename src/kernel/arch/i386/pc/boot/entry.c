@@ -1,9 +1,9 @@
-#include "../cpu/gdt.h"
-#include "../cpu/idt.h"
-#include "../cpu/isr.h"
-#include "../cpu/paging.h"
-#include "../cpu/tss.h"
-#include "multiboot.h"
+#include <i386/cpu/gdt.h>
+#include <i386/cpu/idt.h>
+#include <i386/cpu/isr.h>
+#include <i386/cpu/paging.h>
+#include <i386/cpu/tss.h>
+#include "./multiboot.h"
 #include <kernel/boot.h>
 #include <kernel/main.h>
 #include <stdint.h>

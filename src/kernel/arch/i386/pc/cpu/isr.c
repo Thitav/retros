@@ -1,9 +1,9 @@
-#include "isr.h"
-#include "idt.h"
-#include "io.h"
+#include <i386/cpu/isr.h>
+#include <i386/cpu/idt.h>
+#include <i386/cpu/io.h>
+#include "./pic.h"
 #include <stdint.h>
 #include <stdio.h>
-#include "pic.h"
 #include <string.h>
 
 // defined in isr.S

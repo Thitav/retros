@@ -1,5 +1,4 @@
-#include "pic.h"
-#include "io.h"
+#include "./pic.h"
 
 void pic_remap(uint8_t offset1, uint8_t offset2) {
     io_outb(PIC_MASTER_COMMAND_PORT, PIC_ICW1_INIT | PIC_ICW1_ICW4); // starts the initialization sequence (in cascade mode)

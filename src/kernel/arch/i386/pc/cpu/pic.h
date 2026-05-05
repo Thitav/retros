@@ -2,7 +2,7 @@
 #define _PIC_H
 
 #include <stdint.h>
-#include "io.h"
+#include <i386/cpu/io.h>
 
 #define PIC_MASTER_COMMAND_PORT 0x20
 #define PIC_MASTER_DATA_PORT (PIC_MASTER_COMMAND_PORT + 1)

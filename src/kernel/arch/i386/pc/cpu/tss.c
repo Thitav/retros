@@ -1,4 +1,4 @@
-#include "tss.h"
+#include <i386/cpu/tss.h>
 #include <string.h>
 
 static struct tss_entry tss_entry;

@@ -2,7 +2,7 @@
 #include <kernel/arch/interrupt.h>
 #include <kernel/arch/timer.h>
 #include <stdio.h>
-#include "scheduler.h"
+#include <kernel/process/scheduler.h>
 
 struct schedule_queue queue;
 
@@ -30,7 +30,7 @@ struct thread *_dequeue(struct schedule_queue *queue) {
     return thread;
 }
 
-interrupt_context_t *scheduler_handler(interrupt_context_t *context) {
+arch_interrupt_context_t *scheduler_handler(arch_interrupt_context_t *context) {
     struct thread *thread = _dequeue(&queue);
     thread->target();
     _enqueue(&queue, thread);
@@ -43,7 +43,7 @@ void scheduler_add(struct thread *thread) {
 }
 
 void scheduler_init() {
-    interrupt_set_handler(0, scheduler_handler);
-    timer_init();
-    timer_set(50);
+    arch_interrupt_set_handler(0, scheduler_handler);
+    arch_timer_init();
+    arch_timer_set(50);
 }

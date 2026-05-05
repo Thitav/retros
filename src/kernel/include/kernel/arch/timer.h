@@ -4,11 +4,13 @@
 #include <stdint.h>
 #include <arch/timer.h>
 
-#ifndef __ARCH_INLINE_TIMER_INIT
-void timer_init();
-#endif
-#ifndef __ARCH_INLINE_TIMER_SET
-void timer_set(uint16_t delay_ms);
-#endif
+static inline void arch_timer_init(void) {
+    arch_impl_timer_init();
+}
+
+static inline void arch_timer_set(unsigned delay_ms) {
+    arch_impl_timer_set(delay_ms);
+}
+
 
 #endif

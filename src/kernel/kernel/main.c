@@ -5,21 +5,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "scheduler.h"
+#include <kernel/process/scheduler.h>
 #include <kernel/boot.h>
-#include "pmm.h"
-#include "utils/bitmap.h"
+#include <kernel/memory/pmm.h>
 
 void thread1(void) {
-    //printf("1\n");
+    printf("1\n");
 }
 
 void thread2(void) {
-    //printf("2\n");
+    printf("2\n");
 }
 
 void thread3(void) {
-    //printf("3\n");
+    printf("3\n");
 }
 
 void kernel_main(struct boot_info *boot_info)

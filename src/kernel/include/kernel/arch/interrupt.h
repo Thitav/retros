@@ -4,8 +4,12 @@
 #include <stdint.h>
 #include <arch/interrupt.h>
 
-#ifndef __ARCH_INLINE_INTERRUPT_SET_HANDLER
-void interrupt_set_handler(uint8_t int_no, interrupt_handler_t handler);
-#endif
+typedef arch_impl_interrupt_handler_t arch_interrupt_handler_t;
+typedef arch_impl_interrupt_context_t arch_interrupt_context_t;
+
+static inline void arch_interrupt_set_handler(unsigned char int_no, arch_interrupt_handler_t handler) {
+    arch_impl_interrupt_set_handler(int_no, handler);
+}
+
 
 #endif

@@ -1,4 +1,4 @@
-#include "idt.h"
+#include <i386/cpu/idt.h>
 
 // __attribute__((aligned(0x10))) static struct idt_entry idt_entries[IDT_MAX_DESCRIPTORS];
 static struct idt_descriptor idtr;
