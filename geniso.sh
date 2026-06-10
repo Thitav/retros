@@ -4,4 +4,5 @@ rm -r ./isodir
 mkdir -p ./isodir/boot/grub
 cp ./build/sysroot/usr/boot/kernel.bin ./isodir/boot/retros.bin
 cp ./grub.cfg ./isodir/boot/grub/grub.cfg
+cp ./user/sysproc ./isodir/boot/
 grub-mkrescue -o ./isodir/retros.iso ./isodir

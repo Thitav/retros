@@ -1,0 +1,9 @@
+#ifndef KERNEL_SYSCALL_ERROR_H
+#define KERNEL_SYSCALL_ERROR_H
+
+enum syscall_error {
+    SYSCALL_ERROR_SUCCESS = 0,
+    SYSCALL_ERROR_INVALID_CAPABILITY = -1,
+};
+
+#endif

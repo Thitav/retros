@@ -1,0 +1,3 @@
+[submodule "toolchain/mlibc"]
+	path = toolchain/mlibc
+	url = https://github.com/thitav/mlibc

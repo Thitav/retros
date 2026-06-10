@@ -1,0 +1,16 @@
+[host_machine]
+system = 'retros'
+cpu_family = 'x86'
+cpu = 'i386'
+endian = 'little'
+
+[binaries]
+c = 'i386-retros-gcc'
+cpp = 'i386-retros-g++'
+ar = 'i386-retros-ar'
+strip = 'i386-retros-strip'
+ld = 'i386-retros-ld'
+
+[built-in options]
+c_args = ['-march=i386', '-m32']
+cpp_args = ['-march=i386', '-m32']

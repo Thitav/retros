@@ -1,0 +1,122 @@
+diff --git a/bfd/config.bfd b/bfd/config.bfd
+index 4dde5321f23..9b6400bd4ee 100644
+--- a/bfd/config.bfd
++++ b/bfd/config.bfd
+@@ -242,6 +242,18 @@ esac
+ 
+ case "${targ}" in
+ # START OF targmatch.h
++  i[3-7]86-*-retros*)
++    targ_defvec=i386_elf32_vec
++    targ_selvecs=
++    targ64_selvecs=x86_64_elf64_vec
++    ;;
++#ifdef BFD64
++  x86_64-retros*)
++    targ_defvec=x86_64_elf64_vec
++    targ_selvecs=i386_elf32_vec
++    want64=true
++    ;;
++#endif
+ #ifdef BFD64
+   aarch64-*-darwin*)
+     targ_defvec=aarch64_mach_o_vec
+diff --git a/config.sub b/config.sub
+index 3d35cde174d..d7312b0ebba 100755
+--- a/config.sub
++++ b/config.sub
+@@ -2099,6 +2099,7 @@ case $os in
+ 	| qnx* \
+ 	| rdos* \
+ 	| redox* \
++    | retros* \
+ 	| rhapsody* \
+ 	| riscix* \
+ 	| riscos* \
+diff --git a/gas/configure.tgt b/gas/configure.tgt
+index f0ea55d9def..f05c5b36052 100644
+--- a/gas/configure.tgt
++++ b/gas/configure.tgt
+@@ -126,6 +126,7 @@ esac
+ generic_target=${cpu_type}-$vendor-$os
+ # Note: This table is alpha-sorted, please try to keep it that way.
+ case ${generic_target} in
++  i386-*-retros*)    fmt=elf ;;
+   aarch64*-*-elf*)			fmt=elf;;
+   aarch64*-*-fuchsia*)			fmt=elf;;
+   aarch64*-*-haiku*)			fmt=elf em=haiku ;;
+diff --git a/ld/Makefile.am b/ld/Makefile.am
+index c219662d2e3..068e5d35596 100644
+--- a/ld/Makefile.am
++++ b/ld/Makefile.am
+@@ -153,6 +153,7 @@ endif
+ 
+ # These all start with e so 'make clean' can find them.
+ ALL_EMULATION_SOURCES = \
++    eelf_i386_retros.c \
+ 	eaix5ppc.c \
+ 	eaix5rs6.c \
+ 	eaixppc.c \
+@@ -373,6 +374,7 @@ ALL_EMULATION_SOURCES = \
+ ALL_EMULATIONS = $(ALL_EMULATION_SOURCES:.c=.@OBJEXT@)
+ 
+ ALL_64_EMULATION_SOURCES = \
++    eelf_x86_64_retros.c \
+ 	eaarch64elf.c \
+ 	eaarch64elf32.c \
+ 	eaarch64elf32b.c \
+diff --git a/ld/Makefile.in b/ld/Makefile.in
+index f1ba6af5269..3cbce0cc701 100644
+--- a/ld/Makefile.in
++++ b/ld/Makefile.in
+@@ -668,6 +668,7 @@ LIBIBERTY = ../libiberty/libiberty.a
+ 
+ # These all start with e so 'make clean' can find them.
+ ALL_EMULATION_SOURCES = \
++    eelf_i386_retros.c \
+ 	eaix5ppc.c \
+ 	eaix5rs6.c \
+ 	eaixppc.c \
+@@ -887,6 +888,7 @@ ALL_EMULATION_SOURCES = \
+ 
+ ALL_EMULATIONS = $(ALL_EMULATION_SOURCES:.c=.@OBJEXT@)
+ ALL_64_EMULATION_SOURCES = \
++    eelf_x86_64_retros.c \
+ 	eaarch64elf.c \
+ 	eaarch64elf32.c \
+ 	eaarch64elf32b.c \
+diff --git a/ld/configure.tgt b/ld/configure.tgt
+index 3e158913b89..c96505498df 100644
+--- a/ld/configure.tgt
++++ b/ld/configure.tgt
+@@ -81,7 +81,16 @@ fi
+ 
+ # Please try to keep this table more or less in alphabetic order - it
+ # makes it much easier to lookup a specific archictecture.
+ case "${targ}" in
++i[3-7]86-*-retros*)
++			targ_emul=elf_i386_retros
++			targ_extra_emuls=elf_i386
++			targ64_extra_emuls="elf_x86_64_retros elf_x86_64"
++			;;
++x86_64-*-retros*)
++			targ_emul=elf_x86_64_retros
++			targ_extra_emuls="elf_i386_retros elf_x86_64 elf_i386"
++			;;
+ aarch64_be-*-elf)	targ_emul=aarch64elfb
+ 			targ_extra_emuls="aarch64elf aarch64elf32 aarch64elf32b armelfb armelf"
+ 			;;
+diff --git a/ld/emulparams/elf_i386_retros.sh b/ld/emulparams/elf_i386_retros.sh
+new file mode 100644
+index 00000000000..9d11a528132
+--- /dev/null
++++ b/ld/emulparams/elf_i386_retros.sh
+@@ -0,0 +1 @@
++source_sh ${srcdir}/emulparams/elf_i386.sh
+diff --git a/ld/emulparams/elf_x86_64_retros.sh b/ld/emulparams/elf_x86_64_retros.sh
+new file mode 100644
+index 00000000000..59e7df71afc
+--- /dev/null
++++ b/ld/emulparams/elf_x86_64_retros.sh
+@@ -0,0 +1 @@
++source_sh ${srcdir}/emulparams/elf_x86_64.sh
