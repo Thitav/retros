@@ -1,9 +1,9 @@
 #include <x86/cpu/idt.h>
 
-// __attribute__((aligned(0x10))) static struct idt_entry idt_entries[IDT_MAX_DESCRIPTORS];
+// __attribute__((aligned(0x10))) static struct idt_entry idt_entries[IDT_MAX_ENTRIES];
 static struct idt_descriptor idtr;
 
-void idt_entry(struct idt_entry* idt_table, uint16_t index, void *isr, uint8_t flags)
+void idt_entry(struct idt_entry* idt_table, uint8_t index, void *isr, uint8_t flags)
 {
     struct idt_entry *entry = &idt_table[index];
 

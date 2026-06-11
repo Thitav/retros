@@ -21,7 +21,7 @@ static struct x86_vm_mapping kernel_mapping;
 static struct boot_module boot_modules[MAX_BOOT_MODULES];
 static struct boot_info boot_info;
 
-__attribute__((aligned(0x10))) static struct idt_entry idt_table[IDT_MAX_DESCRIPTORS];
+__attribute__((aligned(0x10))) static struct idt_entry idt_table[IDT_MAX_ENTRIES];
 
 #define VM_MAP_BASE (PAGE_VADDR_PD_INDEX(KERNEL_BASE) + 1)
 #define VM_MAP_MAX (PAGE_VADDR_PD_INDEX(UINTPTR_MAX) - 1)
@@ -143,14 +143,14 @@ __attribute__((used)) void kernel_entry(uint32_t mb_magic, multiboot_info_t *mb_
     *ring3_data = *ring3_code;
     ring3_data->executable = 0;
 
+    tss_init(2 * 8, (uint32_t)&stack_top); // 2 * 8 for the kernel data segment (index 2)
     tss_write_gdt(&gdt[5]); // TSS segment will be the fifth
+
     gdt_load(sizeof(gdt), (uint32_t)&gdt[0]);
+    tss_load();
 
     isr_init(&idt_table[0]);
     idt_load(&idt_table[0], sizeof(idt_table) - 1);
-
-    tss_init(2 * 8, (uint32_t)&stack_top); // 2 * 8 for the kernel data segment (index 2)
-    tss_load();
 
     boot_info.framebuffer_width = mb_info->framebuffer_width;
     boot_info.framebuffer_height = mb_info->framebuffer_height;

@@ -41,9 +41,18 @@ x86_thread_context_jump:
 
 .global x86_thread_trampoline
 x86_thread_trampoline: # (thread_entry_t entry, int argc, char **argv)
-    popl %eax
-    call *%eax
+    popl %ecx
+    
+    movw $((4 * 8) | 3), %ax
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %fs
+    movw %ax, %gs
 
-1:
-    hlt
-    jmp 1b
+    movl %esp, %eax
+    pushl $((4 * 8) | 3)
+    pushl %eax
+    pushfl
+    pushl $((3 * 8) | 3) # code selector (ring 3 code with bottom 2 bits set for ring 3)
+	pushl %ecx # instruction address to return to
+	iret

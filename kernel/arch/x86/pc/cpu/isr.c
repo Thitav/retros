@@ -10,17 +10,21 @@
 // defined in isr.S
 extern void *isr_stub_table[];
 
-static isr_handler_t isr_handlers[IDT_MAX_DESCRIPTORS] = { NULL };
+static isr_handler_t isr_handlers[IDT_MAX_ENTRIES] = { NULL };
 
 // should be called before idt_init
 void isr_init(struct idt_entry *idt_table)
 {
-    for (uint16_t i = 0; i < IDT_MAX_DESCRIPTORS; i++)
+    uint16_t i = 0;
+    for (i; i < 48; i++)
     {
-        idt_entry(idt_table, i, isr_stub_table[i], 0x8E);
+        idt_entry(idt_table, i, isr_stub_table[i], IDT_ENTRY_PRESENT | IDT_ENTRY_GATE_INTERRUPT);
+    }
+    for (i; i < IDT_MAX_ENTRIES; i++) {
+        idt_entry(idt_table, i, isr_stub_table[i], IDT_ENTRY_PRESENT | IDT_ENTRY_GATE_INTERRUPT | IDT_ENTRY_DPL_USER);
     }
 
-    pic_remap(0x20, 0x28);
+    pic_remap(32, 40);
 }
 
 struct isr_context *isr_entry(struct isr_context *context) 
@@ -33,9 +37,6 @@ struct isr_context *isr_entry(struct isr_context *context)
             __asm__ ("hlt");
         }
     }
-    // char s[16];
-    // lutoa(context->int_no, s, 10);
-    // printf(" %s ", s);
 
     if (isr_handlers[context->int_no] != NULL) {
         return isr_handlers[context->int_no](context);

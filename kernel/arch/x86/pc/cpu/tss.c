@@ -1,6 +1,9 @@
 #include <x86/cpu/tss.h>
 #include <kernel/lib/string.h>
 
+#include <kernel/lib/stdio.h>
+#include <kernel/lib/stdlib.h>
+
 static struct tss_entry tss_entry;
 
 // https://wiki.osdev.org/Getting_to_Ring_3

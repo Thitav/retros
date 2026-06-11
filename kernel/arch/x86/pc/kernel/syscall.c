@@ -8,7 +8,7 @@ void x86_syscall_set_handler(syscall_handler_t handler) {
     kernel_syscall_handler = handler;
 }
 
-void x86_syscall_handler(struct isr_context *context) {
+struct isr_context *x86_syscall_handler(struct isr_context *context) {
     struct syscall_args args;
 
     args.num  = context->eax;
@@ -22,4 +22,5 @@ void x86_syscall_handler(struct isr_context *context) {
 
     // Put the result back into the return register
     context->eax = args.ret;
+    return context;
 }
