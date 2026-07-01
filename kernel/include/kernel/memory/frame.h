@@ -1,9 +1,9 @@
 #ifndef KERNEL_MEMORY_FRAME_H
 #define KERNEL_MEMORY_FRAME_H
 
-#include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 struct memory_frame {
     uintptr_t paddr;
@@ -12,8 +12,13 @@ struct memory_frame {
     bool mapped;
 };
 
-void memory_frame_init(struct memory_frame *frame, uintptr_t paddr, size_t size);
+void memory_frame_init(struct memory_frame *frame, uintptr_t paddr,
+                       size_t size);
 uintptr_t memory_frame_alloc(struct memory_frame *frame, size_t size);
-struct memory_frame *memory_frame_map(struct memory_frame *frame);
+bool memory_frame_map(struct memory_frame *frame);
+bool memory_frame_merge(struct memory_frame *frame1,
+                        struct memory_frame *frame2);
+bool memory_frame_split(struct memory_frame *frame1,
+                        struct memory_frame *frame2, size_t size);
 
 #endif

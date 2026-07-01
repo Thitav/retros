@@ -37,6 +37,7 @@ struct tss_entry {
 
 void tss_write_gdt(struct gdt_entry *gdt);
 void tss_init(uint32_t kernel_ss, uint32_t kernel_sp);
+void tss_set_sp(uint32_t sp);
 extern void tss_load(void);
 
 #endif

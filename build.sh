@@ -1,3 +1,5 @@
 #!/bin/sh
 
+set -ex
+
 cmake -B ./build -DCMAKE_TOOLCHAIN_FILE=x86.cmake

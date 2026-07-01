@@ -11,7 +11,7 @@
 #define X86_PM_PAGES_COUNT (UINTPTR_MAX / PAGE_SIZE)
 #define X86_PM_USED_PAGES_LEN BITMAP_ELEMENTS(X86_PM_PAGES_COUNT)
 
-static bitmap_t x86_pm_used[X86_PM_USED_PAGES_LEN] = { BITMAP_T_MAX };
+static bitmap_t x86_pm_used[X86_PM_USED_PAGES_LEN] = { 0 };
 
 static inline void x86_pm_set_available(size_t page) {
     bitmap_clear(&x86_pm_used, X86_PM_PAGE_TO_BITMAP_OFFSET(page));

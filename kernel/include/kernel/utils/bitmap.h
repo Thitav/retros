@@ -37,8 +37,6 @@ static inline bool bitmap_get(bitmap_t* bitmap, size_t bit) {
     return bitmap_get_ex(bitmap, BITMAP_INDEX(bit), BITMAP_OFFSET(bit));
 }
 
-static inline unsigned char bitmap_ctz(bitmap_t element) {
-    return (unsigned char)(__builtin_ctzl(element));
-}
+size_t bitmap_find(bitmap_t *bitmap, size_t bitmap_len, size_t min, size_t max, bool set, size_t *out_len);
 
 #endif

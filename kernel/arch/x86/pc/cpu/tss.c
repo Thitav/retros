@@ -40,3 +40,7 @@ void tss_init(uint32_t kernel_ss, uint32_t kernel_sp) {
     tss_entry.esp0 = kernel_sp; // Set the kernel stack pointer.
                                                    // note that CS is loaded from the IDT entry and should be the regular kernel code segment
 }
+
+void tss_set_sp(uint32_t sp) {
+    tss_entry.esp0 = sp;
+}

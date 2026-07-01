@@ -1,8 +1,7 @@
-#include <kernel/syscall.h>
 #include "ipc.h"
-#include "frame.h"
 #include <kernel/lib/stdio.h>
 #include <kernel/lib/stdlib.h>
+#include <kernel/syscall.h>
 
 static void _test_syscall(struct syscall_args *args) {
     char s[16];
@@ -16,7 +15,7 @@ static const syscall_handler_t syscall_table[] = {
     [SYSCALL_NUMBER_IPC_FUNCTION] = syscall_ipc_function,
     [SYSCALL_NUMBER_IPC_CALL] = syscall_ipc_call,
     [SYSCALL_NUMBER_IPC_RETURN] = syscall_ipc_return,
-    [SYSCALL_NUMBER_UNTYPED_FRAME_RETYPE] = syscall_untyped_frame_retype,
+    // [SYSCALL_NUMBER_UNTYPED_FRAME_RETYPE] = syscall_untyped_frame_retype,
     [69] = _test_syscall,
 };
 

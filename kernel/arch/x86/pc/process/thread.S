@@ -1,6 +1,10 @@
 .section .text
+
+.set thread_context_esp, 0
+.set thread_context_kernel_esp, 4
+
 .global x86_thread_context_switch
-# void x86_thread_context_switch(uint32_t *current_esp, uint32_t new_esp)
+# void x86_thread_context_switch(x86_thread_context *current_context, x86_thread_context *next_context)
 x86_thread_context_switch:
     # save callee saved registers
     pushl %ebp
@@ -8,14 +12,17 @@ x86_thread_context_switch:
     pushl %esi
     pushl %edi
 
-    # 20(%esp) -> uintptr_t *current_esp
-    movl 20(%esp), %eax
+    # 20(%esp) -> struct x86_thread_context *current_context
+    movl 20(%esp), %ebx
     # save current esp in current thread stored esp
-    movl %esp, (%eax)
-    # 24(%esp) -> uintptr_t new_esp
-    movl 24(%esp), %edx
+    movl %esp, thread_context_esp(%ebx)
+    # 24(%esp) -> struct x86_thread_context *next_context
+    movl 24(%esp), %ebx
     # switch the esp to the new thread stored esp
-    movl %edx, %esp
+    pushl thread_context_kernel_esp(%ebx)
+    call tss_set_sp
+
+    movl thread_context_esp(%ebx), %esp
 
     # recover callee saved registers
     popl %edi
@@ -27,9 +34,13 @@ x86_thread_context_switch:
 
 .global x86_thread_context_jump
 x86_thread_context_jump:
-    movl 4(%esp), %edx
+    movl 4(%esp), %ebx
     # switch the esp to the new thread stored esp
-    movl %edx, %esp
+
+    pushl thread_context_kernel_esp(%ebx)
+    call tss_set_sp
+
+    movl thread_context_esp(%ebx), %esp
 
     # recover callee saved registers
     popl %edi

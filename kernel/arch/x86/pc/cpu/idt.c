@@ -1,10 +1,11 @@
 #include <x86/cpu/idt.h>
 
-// __attribute__((aligned(0x10))) static struct idt_entry idt_entries[IDT_MAX_ENTRIES];
+// __attribute__((aligned(0x10))) static struct idt_entry
+// idt_entries[IDT_MAX_ENTRIES];
 static struct idt_descriptor idtr;
 
-void idt_entry(struct idt_entry* idt_table, uint8_t index, void *isr, uint8_t flags)
-{
+void idt_entry(struct idt_entry *idt_table, uint8_t index, void *isr,
+               uint8_t flags) {
     struct idt_entry *entry = &idt_table[index];
 
     entry->isr_low = ((uint32_t)isr) & 0xFFFF;
@@ -14,10 +15,9 @@ void idt_entry(struct idt_entry* idt_table, uint8_t index, void *isr, uint8_t fl
     entry->reserved = 0;
 }
 
-void idt_load(struct idt_entry* idt_table, uint16_t size)
-{
+void idt_load(struct idt_entry *idt_table, uint16_t size) {
     idtr.offset = (uint32_t)idt_table;
     idtr.size = size;
-    __asm__ __volatile__("lidt %0" : : "m"(idtr)); // load the new IDT
-    __asm__ __volatile__("sti");                   // set the interrupt flag
+    asm volatile("lidt %0" : : "m"(idtr)); // load the new IDT
+    asm volatile("sti");                   // set the interrupt flag
 }

@@ -1,9 +1,9 @@
 #ifndef KERNEL_SYSCALL_H
 #define KERNEL_SYSCALL_H
 
-#include <stddef.h>
-#include <arch/syscall.h>
+#include <arch/syscall/syscall.h>
 #include <kernel/types/syscall.h>
+#include <stddef.h>
 
 void syscall_init(void);
 

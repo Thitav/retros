@@ -1,0 +1,7 @@
+---
+Checks:          '-*,bugprone-*,cert-*,modernize-*,performance-*,readability-*,misc-include-cleaner,clang-diagnostic-*,clang-analyzer-*'
+WarningsAsErrors: '*'
+HeaderFilterRegex: ''
+FormatStyle:     file
+Checks: "-performance-no-int-to-ptr"
+...

@@ -1,40 +1,40 @@
-#include <x86/cpu/isr.h>
-#include <x86/cpu/idt.h>
-#include <x86/cpu/io.h>
 #include "./pic.h"
-#include <stdint.h>
 #include <kernel/lib/stdio.h>
 #include <kernel/lib/stdlib.h>
 #include <kernel/lib/string.h>
+#include <stdint.h>
+#include <x86/cpu/idt.h>
+#include <x86/cpu/io.h>
+#include <x86/cpu/isr.h>
 
 // defined in isr.S
 extern void *isr_stub_table[];
 
-static isr_handler_t isr_handlers[IDT_MAX_ENTRIES] = { NULL };
+static isr_handler_t isr_handlers[IDT_MAX_ENTRIES] = {NULL};
 
 // should be called before idt_init
-void isr_init(struct idt_entry *idt_table)
-{
+void isr_init(struct idt_entry *idt_table) {
     uint16_t i = 0;
-    for (i; i < 48; i++)
-    {
-        idt_entry(idt_table, i, isr_stub_table[i], IDT_ENTRY_PRESENT | IDT_ENTRY_GATE_INTERRUPT);
+    for (i; i < 48; i++) {
+        idt_entry(idt_table, i, isr_stub_table[i],
+                  IDT_ENTRY_PRESENT | IDT_ENTRY_GATE_INTERRUPT);
     }
     for (i; i < IDT_MAX_ENTRIES; i++) {
-        idt_entry(idt_table, i, isr_stub_table[i], IDT_ENTRY_PRESENT | IDT_ENTRY_GATE_INTERRUPT | IDT_ENTRY_DPL_USER);
+        idt_entry(idt_table, i, isr_stub_table[i],
+                  IDT_ENTRY_PRESENT | IDT_ENTRY_GATE_INTERRUPT |
+                      IDT_ENTRY_DPL_USER);
     }
 
     pic_remap(32, 40);
 }
 
-struct isr_context *isr_entry(struct isr_context *context) 
-{
+struct isr_context *isr_entry(struct isr_context *context) {
     pic_eoi();
 
     if (context->int_no < 32) {
-        __asm__ ("cli");
+        asm("cli");
         while (1) {
-            __asm__ ("hlt");
+            asm("hlt");
         }
     }
 

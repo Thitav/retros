@@ -58,3 +58,4 @@ build/
 isodir/
 *.log
 .vscode/
+.cache/

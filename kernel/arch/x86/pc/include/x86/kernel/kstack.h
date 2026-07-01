@@ -1,0 +1,17 @@
+#ifndef X86_KSTACK_H
+#define X86_KSTACK_H
+
+#include <x86/cpu/paging.h>
+
+#define X86_KSTACK_COUNT (16)
+#define X86_KSTACK_PAGES (2)
+#define X86_KSTACK_SIZE (X86_KSTACK_PAGES * PAGE_SIZE)
+#define X86_KSTACK_GAP_PAGES (1)
+#define X86_KSTACK_GAP_SIZE (X86_KSTACK_GAP_PAGES * PAGE_SIZE)
+#define X86_KSTACK_SIZE_WITH_GAP (X86_KSTACK_SIZE + X86_KSTACK_GAP_SIZE)
+#define X86_KSTACK_TOTAL_SIZE (X86_KSTACK_COUNT * X86_KSTACK_SIZE_WITH_GAP)
+
+void x86_kstack_init(void);
+void *x86_kstack_alloc(void);
+
+#endif
